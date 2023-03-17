@@ -1198,13 +1198,13 @@
         "type": "function",
         "z": "3df5da342dc3b8ab",
         "name": "mudaPayload",
-        "func": "if (msg.payload.POWER === \"ON\") {\n    msg.payload.POWER = true\n}\nif (msg.payload.POWER === \"OFF\") {\n    msg.payload.POWER = false\n}\nconst topic = msg.topic.split('/')\nmsg.payload ={\n    data: {\n        \"device\": topic[1],\n        \"power\": msg.payload.POWER,\n        \"type\": topic[0],\n        \"subject\": topic[2],\n\n}\n}\nreturn msg;",
+        "func": "if (msg.payload.POWER === \"ON\") {\n    msg.payload.POWER = true\n}\nif (msg.payload.POWER === \"OFF\") {\n    msg.payload.POWER = false\n}\nconst topic = msg.topic.split('/')\nmsg.payload ={\n    data: {\n        \"workstation\": Number(topic[2]),\n        \"power\": msg.payload.POWER,\n        \"type\": topic[0],\n        \"subject\": topic[3],\n\n}\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 220,
+        "x": 240,
         "y": 360,
         "wires": [
             [
@@ -1248,7 +1248,7 @@
         "type": "function",
         "z": "3df5da342dc3b8ab",
         "name": "function 5",
-        "func": "msg.payload ={\n    data: msg.payload.data,\n    device: msg.payload.data.device,\n    power: msg.payload.data.power\n}\nreturn msg;\n",
+        "func": "msg.payload ={\n    data: {\n        workstation: msg.payload.data.workstation,\n        power: msg.payload.data.power\n    }\n}\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1258,7 +1258,8 @@
         "y": 300,
         "wires": [
             [
-                "af84a8c1cf4b9f52"
+                "af84a8c1cf4b9f52",
+                "3d1d5c9cd2b70401"
             ]
         ]
     },
@@ -1270,7 +1271,7 @@
         "method": "POST",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "192.168.2.169:1337/api/disponibilities",
+        "url": "192.168.2.191:1337/api/availabilities",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -1282,23 +1283,7 @@
         "y": 300,
         "wires": [
             [
-                "517d92dc1e019ace"
-            ]
-        ]
-    },
-    {
-        "id": "517d92dc1e019ace",
-        "type": "json",
-        "z": "3df5da342dc3b8ab",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 1090,
-        "y": 300,
-        "wires": [
-            [
-                "218b250524b8c1a9"
+                "3dee1049195fb9e2"
             ]
         ]
     },
@@ -1338,7 +1323,7 @@
         "type": "debug",
         "z": "3df5da342dc3b8ab",
         "name": "msg final",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1355,7 +1340,7 @@
         "type": "debug",
         "z": "3df5da342dc3b8ab",
         "name": "erro",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1363,9 +1348,117 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 650,
+        "x": 630,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "d97eb56d32cbcd9d",
+        "type": "inject",
+        "z": "3df5da342dc3b8ab",
+        "name": "ON",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "stat/tasmota_E302E6/RESULT",
+        "payload": "{\"POWER\":\"ON\"}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "8845bd06df529a4b"
+            ]
+        ]
+    },
+    {
+        "id": "8845bd06df529a4b",
+        "type": "mqtt out",
+        "z": "3df5da342dc3b8ab",
+        "name": "",
+        "topic": "stat/usinagem/1/RESULT",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "946f1451f9d69c69",
+        "x": 310,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "f94894a09d699d16",
+        "type": "inject",
+        "z": "3df5da342dc3b8ab",
+        "name": "OFF",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "stat/tasmota_E302E6/RESULT",
+        "payload": "{\"POWER\":\"OFF\"}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "8845bd06df529a4b"
+            ]
+        ]
+    },
+    {
+        "id": "3d1d5c9cd2b70401",
+        "type": "debug",
+        "z": "3df5da342dc3b8ab",
+        "name": "debug 11",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
         "y": 380,
         "wires": []
+    },
+    {
+        "id": "3dee1049195fb9e2",
+        "type": "json",
+        "z": "3df5da342dc3b8ab",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1110,
+        "y": 300,
+        "wires": [
+            [
+                "218b250524b8c1a9"
+            ]
+        ]
     },
     {
         "id": "7ab6a0fe807eade4",
@@ -1606,7 +1699,7 @@
         "type": "debug",
         "z": "b4c5eb1b69d082fa",
         "name": "debug 10",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
