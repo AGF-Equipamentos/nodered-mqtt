@@ -4,6 +4,7 @@ services:
   node-red:
     container_name: nodered
     image: nodered/node-red:latest
+    restart: always
     ports:
       - 1880:1880
     volumes:
@@ -19,6 +20,7 @@ services:
     hostname: my-rabbitmq
     container_name: rabbitmq
     command: "/bin/bash -c \"rabbitmq-plugins enable rabbitmq_mqtt; rabbitmq-server\""
+    restart: always
     ports:
       - 5672:5672
       - 15672:15672
@@ -26,8 +28,8 @@ services:
     networks:
       - compose-bridge  
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=pass123
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     volumes:
       - ./rabbitmq-data/:/var/lib/rabbitmq
 

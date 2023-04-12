@@ -9,3 +9,6 @@
 !/nodered-data/.config.nodes.json
 !/nodered-data/flows.json
 !/nodered-data/settings.js
+
+# env
+.env
