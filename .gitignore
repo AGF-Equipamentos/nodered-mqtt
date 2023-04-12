@@ -12,3 +12,4 @@
 
 # env
 .env
+!/nodered-data/.env.example

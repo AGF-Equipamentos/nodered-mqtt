@@ -41,7 +41,7 @@ module.exports = {
      * node-red from being able to decrypt your existing credentials and they will be
      * lost.
      */
-    credentialSecret: "a-secret-key",
+    credentialSecret: process.env.CREDENTIAL_SECRET,
 
     /** By default, the flow JSON will be formatted over multiple lines making
      * it easier to compare changes when using version control.
@@ -76,8 +76,8 @@ module.exports = {
     adminAuth: {
        type: "credentials",
        users: [{
-           username: "admin",
-           password: "$2b$08$cRJta/qR/rkn2d6AGpLNKOBiIui7Mjrupa7l6p6RgTE6oxqM6V2Bm",
+           username: process.env.ADMIN_USERNAME,
+           password: process.env.ADMIN_PASSWORD,
            permissions: "*"
        }]
     },
